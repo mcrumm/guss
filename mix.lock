@@ -7,6 +7,7 @@
   "httpoison": {:hex, :httpoison, "1.4.0", "e0b3c2ad6fa573134e42194d13e925acfa8f89d138bc621ffb7b1989e6d22e73", [:mix], [{:hackney, "~> 1.8", [hex: :hackney, repo: "hexpm", optional: false]}], "hexpm"},
   "idna": {:hex, :idna, "6.0.0", "689c46cbcdf3524c44d5f3dde8001f364cd7608a99556d8fbd8239a5798d4c10", [:rebar3], [{:unicode_util_compat, "0.4.1", [hex: :unicode_util_compat, repo: "hexpm", optional: false]}], "hexpm"},
   "json_web_token": {:hex, :json_web_token, "0.2.10", "61041d56369422c5e3a770cf7d7bf27224b3c4c12d3a7d79b43a002df766db22", [:mix], [{:poison, "~> 3.1", [hex: :poison, repo: "hexpm", optional: false]}], "hexpm"},
+  "junit_formatter": {:hex, :junit_formatter, "2.2.0", "da6093f0740c58a824f9585ebb7cb1b960efaecf48d1fa969e95d9c47c6b19dd", [:mix], [], "hexpm"},
   "makeup": {:hex, :makeup, "0.5.5", "9e08dfc45280c5684d771ad58159f718a7b5788596099bdfb0284597d368a882", [:mix], [{:nimble_parsec, "~> 0.4", [hex: :nimble_parsec, repo: "hexpm", optional: false]}], "hexpm"},
   "makeup_elixir": {:hex, :makeup_elixir, "0.10.0", "0f09c2ddf352887a956d84f8f7e702111122ca32fbbc84c2f0569b8b65cbf7fa", [:mix], [{:makeup, "~> 0.5.5", [hex: :makeup, repo: "hexpm", optional: false]}], "hexpm"},
   "metrics": {:hex, :metrics, "1.0.1", "25f094dea2cda98213cecc3aeff09e940299d950904393b2a29d191c346a8486", [:rebar3], [], "hexpm"},
