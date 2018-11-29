@@ -17,25 +17,23 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
-            - v1-mix-cache-{{ .Branch }}
+            - v1-mix-cache-{{ checksum "mix.lock" }}
             - v1-mix-cache
       - restore_cache:
           keys:
-            - v1-build-cache-{{ .Branch }}
+            - v1-build-cache-{{ checksum "mix.lock" }}
             - v1-build-cache
+
       - run: mix do deps.get, compile
+
       - save_cache:
-          key: v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
-          paths: "deps"
-      - save_cache:
-          key: v1-mix-cache-{{ .Branch }}
+          key: v1-mix-cache-{{ checksum "mix.lock" }}
           paths: "deps"
       - save_cache:
           key: v1-mix-cache
           paths: "deps"
       - save_cache:
-          key: v1-build-cache-{{ .Branch }}
+          key: v1-build-cache-{{ checksum "mix.lock" }}
           paths: "_build"
       - save_cache:
           key: v1-build-cache
@@ -45,3 +43,43 @@ jobs:
 
       - store_test_results:
           path: _build/test/lib/guss
+
+  publish:
+    parallelism: 1
+    docker:
+      - image: circleci/elixir:1.7.3
+
+    working_directory: ~/app
+
+    steps:
+      - checkout
+
+      - run: mix local.hex --force
+      - run: mix local.rebar --force
+
+      - restore_cache:
+          keys:
+            - v1-mix-cache-{{ checksum "mix.lock" }}
+            - v1-mix-cache
+
+      - run: mix compile --force
+      - run: mix docs
+      - run: mix publish --yes
+
+
+workflows:
+  version: 2
+  build-n-publish:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - publish:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
