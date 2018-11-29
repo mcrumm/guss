@@ -2,6 +2,9 @@ defmodule Guss.Signature do
   @moduledoc """
   Signs resources using RSA signatures with SHA256 to authenticate requests.
 
+  Signature was built to work with a `Guss.Resource`, but it will accept
+  any struct that implements `List.Chars`.
+
   For more information, see [Creating a Signed URL using a program](https://cloud.google.com/storage/docs/access-control/create-signed-urls-program).
   """
   @otp_greater_21? :erlang.system_info(:otp_release) >= '21'

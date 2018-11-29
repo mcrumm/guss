@@ -41,7 +41,14 @@ defmodule Guss.MixProject do
       main: "readme",
       extras: ["README.md"],
       source_ref: "v#{@version}",
-      source_url: github_link()
+      source_url: github_link(),
+      groups_for_modules: [
+        "iodata components": [
+          Guss.Resource,
+          Guss.Canonical,
+          Guss.Canonical.Extensions
+        ]
+      ]
     ]
   end
 

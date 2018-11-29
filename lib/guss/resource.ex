@@ -5,8 +5,6 @@ defmodule Guss.Resource do
 
   @typedoc """
   Predefined (canned) access control policies.
-
-  For more information, see [ACL Header](https://cloud.google.com/storage/docs/xml-api/reference-headers#xgoogacl).
   """
   @type acl_policy() ::
           :private
@@ -34,12 +32,17 @@ defmodule Guss.Resource do
           | {atom() | String.t(), atom() | String.t()}
         ]
 
+  @typedoc """
+  A request header that applies predefined (canned) ACLs to a bucket or object when you upload it or create it.
+
+  For more information, see [x-goog-acl](https://cloud.google.com/storage/docs/xml-api/reference-headers#xgoogacl).
+  """
   @type acl_header() :: {:acl, acl_policy()}
 
   @typedoc """
   Custom metadata for resource requests/responses.
 
-  For more information, see [Custom Metadata Headers](https://cloud.google.com/storage/docs/xml-api/reference-headers#xgoogmeta)
+  For more information, see [x-goog-meta-](https://cloud.google.com/storage/docs/xml-api/reference-headers#xgoogmeta)
   """
   @type meta_header() :: {:meta, list()}
 

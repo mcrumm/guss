@@ -1,5 +1,6 @@
 defmodule Guss.Canonical.ExtensionsTest do
   use ExUnit.Case, async: true
+  doctest Guss.Canonical.Extensions
   alias Guss.Canonical.Extensions
 
   describe "to_iodata/1" do

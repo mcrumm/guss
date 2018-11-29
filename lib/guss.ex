@@ -64,6 +64,7 @@ defmodule Guss do
   @doc """
   Converts a `Guss.Resource` into a Signed URL.
   """
+  @spec sign(resource :: Guss.Resource.t(), opts :: keyword()) :: {:error, {atom(), any()}} | {:ok, binary()}
   def sign(resource, opts \\ [])
 
   def sign(%Resource{expires: nil} = resource, opts) do
