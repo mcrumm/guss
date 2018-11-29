@@ -24,7 +24,9 @@ jobs:
             - v1-build-cache-{{ checksum "mix.lock" }}
             - v1-build-cache
 
-      - run: mix do deps.get, compile
+      - run: mix do deps.get, deps.compile
+      - run: mix compile
+      - run: MIX_ENV=dev mix compile
 
       - save_cache:
           key: v1-mix-cache-{{ checksum "mix.lock" }}
@@ -40,9 +42,13 @@ jobs:
           paths: "_build"
 
       - run: mix test
+      - run: MIX_ENV=dev mix docs
 
       - store_test_results:
           path: _build/test/lib/guss
+
+      - store_artifacts:
+          path: doc
 
   publish:
     parallelism: 1
@@ -61,6 +67,10 @@ jobs:
           keys:
             - v1-mix-cache-{{ checksum "mix.lock" }}
             - v1-mix-cache
+      - restore_cache:
+          keys:
+            - v1-build-cache-{{ checksum "mix.lock" }}
+            - v1-build-cache
 
       - run: mix compile --force
       - run: mix docs
