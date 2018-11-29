@@ -1,22 +1,19 @@
 defmodule Guss.MixProject do
   use Mix.Project
 
+  @version "0.1.0"
+
   def project do
     [
       app: :guss,
-      version: "0.1.0",
+      version: @version,
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      description: "Signs URLs for Google Cloud Storage",
+      description: "Generate Signed URLs for Google Cloud Storage",
       package: package(),
-      name: "Guss",
       source_url: github_link(),
-      homepage_url: github_link(),
-      docs: [
-        main: "Guss",
-        extras: ["README.md"]
-      ]
+      docs: docs()
     ]
   end
 
@@ -28,9 +25,23 @@ defmodule Guss.MixProject do
 
   defp package do
     [
-      maintainers: ["Michael Crumm"],
+      maintainers: [
+        "Michael Crumm"
+      ],
       licenses: ["MIT"],
-      links: %{"GitHub" => github_link()}
+      links: %{
+        "GitHub" => github_link(),
+        "GCS Signed URLs" => "https://cloud.google.com/storage/docs/access-control/signed-urls"
+      }
+    ]
+  end
+
+  defp docs do
+    [
+      main: "readme",
+      extras: ["README.md"],
+      source_ref: "v#{@version}",
+      source_url: github_link()
     ]
   end
 
