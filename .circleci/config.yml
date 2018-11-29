@@ -74,7 +74,7 @@ jobs:
 
       - run: mix compile --force
       - run: mix docs
-      - run: mix publish --yes
+      - run: mix hex.publish --yes
 
 
 workflows:
