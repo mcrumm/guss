@@ -7,7 +7,7 @@ defmodule Guss.SignatureTest do
     test "with invalid private key, returns error" do
       url = %Resource{bucket: "bucket", objectname: "objectname"}
 
-      assert {:error, {:signature_error, _}} = Signature.generate(url, "thiskeyisnotvalid")
+      assert {:error, {:signature, _}} = Signature.generate(url, "thiskeyisnotvalid")
     end
 
     test "with valid private key, returns {:ok, signature}" do

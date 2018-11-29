@@ -13,14 +13,14 @@ defmodule Guss.ConfigTest do
     test "with unknown account, returns error", %{resource: resource} do
       resource = %{resource | account: "unknown-account@guss-config-test"}
 
-      assert {:error, {:not_found, "client_email"}} = Config.for_resource(Goth.Config, resource)
+      assert {:error, {:config, "client_email"}} = Config.for_resource(Goth.Config, resource)
     end
 
     test "with invalid credentials, returns error", %{resource: resource} do
       config = fixture(:invalid_config)
       resource = %{resource | account: config["client_email"]}
 
-      assert {:error, {:not_found, "private_key"}} = Config.for_resource(Goth.Config, resource)
+      assert {:error, {:config, "private_key"}} = Config.for_resource(Goth.Config, resource)
     end
 
     test "with service account, returns client email from token", %{resource: resource} do

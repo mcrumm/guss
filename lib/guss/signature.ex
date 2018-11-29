@@ -11,14 +11,14 @@ defmodule Guss.Signature do
 
   The given resource must implement the `List.Chars` protocol.
   """
-  @spec generate(any(), binary()) :: {:error, {:signature_error, any()}} | {:ok, binary()}
+  @spec generate(any(), binary()) :: {:error, {:signature, any()}} | {:ok, binary()}
   def generate(resource, private_key) when is_binary(private_key) do
     try do
       signature = generate!(resource, private_key)
 
       {:ok, signature}
     rescue
-      e -> {:error, {:signature_error, e}}
+      e -> {:error, {:signature, e}}
     end
   end
 
