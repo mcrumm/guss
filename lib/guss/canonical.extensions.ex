@@ -1,17 +1,26 @@
 defmodule Guss.Canonical.Extensions do
-  @moduledoc false
+  @moduledoc """
+  Generates iodata for Canonicalized Extension Headers
+
+  Extension headers are generated using the following algorithm:
+
+  1. Make all custom header names lowercase.
+  2. Sort all custom headers by header name using a lexicographical sort by code point value.
+  3. If present, remove the `x-goog-encryption-key` and `x-goog-encryption-key-sha256` headers. These headers contain sensitive information that must not be included in the string-to-sign; however, these headers must still be used in any requests that use the generated signed URL.
+  4. Eliminate duplicate header names by creating one header name with a comma-separated list of values. Be sure there is no whitespace between the values, and be sure that the order of the comma-separated list matches the order that the headers appear in your request. For more information, see [RFC 7230 section 3.2](https://tools.ietf.org/html/rfc7230#section-3.2).
+  5. Replace any folding whitespace or newlines (CRLF or LF) with a single space. For more information about folding whitespace, see [RFC 7230, section 3.2.4](https://tools.ietf.org/html/rfc7230#section-3.2.4).
+  6. Remove any whitespace around the colon that appears after the header name.
+  7. Append a newline `\\n` (U+000A) to each custom header.
+  8. Concatenate all custom headers.
+  """
 
   @doc """
   Converts resource extensions into canonical extension headers.
 
-  1. [x] Makes all custom header names lowercase.
-  2. [x] Sorts all custom headers by header name using a lexicographical sort by code point value.
-  3. [x] If present, removes the `x-goog-encryption-key` and `x-goog-encryption-key-sha256` headers. These headers contain sensitive information that must not be included in the string-to-sign; however, these headers must still be used in any requests that use the generated signed URL.
-  4. [x] Eliminates duplicate header names by creating one header name with a comma-separated list of values. Be sure there is no whitespace between the values, and be sure that the order of the comma-separated list matches the order that the headers appear in your request. For more information, see [RFC 7230 section 3.2](https://tools.ietf.org/html/rfc7230#section-3.2).
-  5. [x] Replaces any folding whitespace or newlines (CRLF or LF) with a single space. For more information about folding whitespace, see [RFC 7230, section 3.2.4](https://tools.ietf.org/html/rfc7230#section-3.2.4).
-  6. [x] Removes any whitespace around the colon that appears after the header name.
-  7. [x] Appends a newline `\n` (U+000A) to each custom header.
-  8. [x] Concatenates all custom headers.
+  ## Examples
+
+      iex> to_string(Guss.Canonical.Extensions.to_iodata(acl: :public_read, meta: [project: [name: "guss"]]))
+      "x-goog-acl:public-read\\nx-goog-meta-project-name:guss\\n"
   """
   @spec to_iodata([{any(), any()}]) :: nil | [any()]
   def to_iodata([]), do: nil

@@ -21,6 +21,10 @@ config :goth,
   json: {:system, "GCP_CREDENTIALS_JSON"}
 ```
 
+## Documentation
+
+Documentation can be found at [https://hexdocs.pm/guss](https://hexdocs.pm/guss).
+
 ## Usage
 
 First, create a new resource with your URL components:
@@ -49,7 +53,9 @@ Guss.sign(%{url | account: "service-account@example.com"})
 
 It is also possible to [use Guss without Goth](#usage-without-goth).
 
-### Expiration
+### String Components
+
+#### Expiration
 
 The default `:expires` value is 1 hour.  You can use `Guss.expires_in/1` to set a custom future timestamp:
 
@@ -68,14 +74,37 @@ iex(4)> url = Guss.new("downloads", "movie.mp4", expires: Guss.expires_in({1, :d
 }
 ```
 
-### Write Requests
+#### Content Type
 
-Guss can generate URLs for temporary write access to GCS buckets.
+Setting the content type in the signature requires the `Content-Type` header to be set on upload:
+
+```elixir
+Guss.put("downloads", "movie.mp4", content_type: "video/mp4")
+```
 
 #### Custom Extension Headers
 
-TODO: Add docs
+Guss can incorporate custom extension headers into the URL signature.
 
+For instance, to set the canned ACL policy for the object during upload:
+
+```elixir
+Guss.put("bucket", "objectname", acl: :public_read)
+```
+
+Any `x-goog-` header can be included in the options list...
+
+```elixir
+Guss.put("bucket", "objectname", content_length_range: "0,256")
+```
+
+...including `x-goog-meta-` headers:
+
+```elixir
+Guss.put("bucket", "objectname", meta: [project: [name: "My Project"]])
+```
+
+**Please Note:** All headers that appear within the signature **MUST** also appear in the request to the Signed URL, or the request will be rejected.
 
 ## Usage without Goth
 
@@ -98,15 +127,3 @@ Then, create a resource and sign it using your config module:
 |> Guss.new("objectname", account: "user@example.com")
 |> Guss.sign(config_module: MyGussConfig)
 ```
-
-
-
-
-
-
-
-
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/guss](https://hexdocs.pm/guss).
