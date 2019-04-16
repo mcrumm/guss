@@ -64,7 +64,8 @@ defmodule Guss do
   @doc """
   Converts a `Guss.Resource` into a Signed URL.
   """
-  @spec sign(resource :: Guss.Resource.t(), opts :: keyword()) :: {:error, {atom(), any()}} | {:ok, binary()}
+  @spec sign(resource :: Guss.Resource.t(), opts :: keyword()) ::
+          {:error, {atom(), any()}} | {:ok, binary()}
   def sign(resource, opts \\ [])
 
   def sign(%Resource{expires: nil} = resource, opts) do
@@ -74,17 +75,10 @@ defmodule Guss do
   def sign(%Resource{} = resource, opts) do
     config_mod = Keyword.get(opts, :config_module, Goth.Config)
 
-    with {:ok, {access_id, private_key}} <- Guss.Config.for_resource(config_mod, resource),
-         {:ok, signature} <- Guss.Signature.generate(resource, private_key) do
-      query =
-        %{
-          "GoogleAccessId" => access_id,
-          "Expires" => resource.expires,
-          "Signature" => signature
-        }
-        |> URI.encode_query()
+    with {:ok, {access_id, private_key}} <- Guss.Config.for_resource(config_mod, resource) do
+      resource = %{resource | account: access_id}
 
-      {:ok, Enum.join([to_string(resource), "?", query])}
+      Guss.StorageV2Signer.sign(resource, private_key)
     end
   end
 
