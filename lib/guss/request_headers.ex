@@ -7,7 +7,7 @@ defmodule Guss.RequestHeaders do
   Convert the enumerable to a dasherized list, suitable for URL signing.
 
   The enumerable will have the following transformations applied:
-  * Header keys are lower-cased.
+  * Header keys are downcased.
   * Underscores (`"_"`) are replaced with dashes (`"-"`).
   * Leading and trailing whitespace is removed.
   * Keys with empty values will be removed.
@@ -117,11 +117,11 @@ defmodule Guss.RequestHeaders do
 
   ## Examples
 
-    iex> Guss.RequestHeaders.deduplicate([{"x", "foo"}, {"x", "bar"}])
-    [{"x", "foo,bar"}]
+      iex> Guss.RequestHeaders.deduplicate([{"x", "Foo"}, {"x", "Bar"}])
+      [{"x", "Foo,Bar"}]
 
-    iex> Guss.RequestHeaders.deduplicate([{"x", "this"}, {"bar", "qux"}, {"x", "that"}])
-    [{"bar", "qux"}, {"x", "this,that"}]
+      iex> Guss.RequestHeaders.deduplicate([{"x", "this"}, {"bar", "qux"}, {"x", "that"}])
+      [{"bar", "qux"}, {"x", "this,that"}]
   """
   def deduplicate(enumerable) do
     for {k, v} <- Enum.group_by(enumerable, &elem(&1, 0), &elem(&1, 1)) do

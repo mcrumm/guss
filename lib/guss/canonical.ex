@@ -1,7 +1,6 @@
 defmodule Guss.Canonical do
-  @moduledoc """
-  Conveniences for converting `Guss.Resource` components into canonical iodata.
-  """
+  @moduledoc false
+
   alias __MODULE__
   alias Guss.Resource
 

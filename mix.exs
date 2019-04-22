@@ -43,10 +43,13 @@ defmodule Guss.MixProject do
       source_ref: "v#{@version}",
       source_url: github_link(),
       groups_for_modules: [
-        "iodata components": [
+        "request components": [
           Guss.Resource,
-          Guss.Canonical,
-          Guss.Canonical.Extensions
+          Guss.RequestHeaders
+        ],
+        signatures: [
+          Guss.StorageV2Signer,
+          Guss.Signature
         ]
       ]
     ]
