@@ -1,9 +1,41 @@
 defmodule Guss.ResourceTest do
   use ExUnit.Case, async: true
+  doctest Guss.Resource
   alias Guss.Resource
 
   setup _ do
     {:ok, resource: %Resource{bucket: "bucket", objectname: "objectname"}}
+  end
+
+  describe "signed_headers/1" do
+    test "returns basic headers", %{resource: resource} do
+      resource = %{resource | content_type: "image/png"}
+
+      assert [{"content-type", "image/png"}] = Resource.signed_headers(resource)
+    end
+
+    test "returns collapsed header names", %{resource: resource} do
+      resource = %{
+        resource
+        | content_type: "image/png",
+          extensions: [
+            acl: :public_read,
+            content_length_range: "0,256",
+            copy_source: [if: [match: "53fc311c"]],
+            copy_source_if_metageneration_match: "1"
+          ]
+      }
+
+      signed_headers = Resource.signed_headers(resource)
+
+      header_names = signed_headers |> Enum.map(&elem(&1, 0))
+
+      assert "content-type" in header_names
+      assert "x-goog-acl" in header_names
+      assert "x-goog-content-length-range" in header_names
+      assert "x-goog-copy-source-if-match" in header_names
+      assert "x-goog-copy-source-if-metageneration-match" in header_names
+    end
   end
 
   describe "defimpl String.Chars" do

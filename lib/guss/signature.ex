@@ -12,7 +12,8 @@ defmodule Guss.Signature do
   @doc """
   Signs the resource iodata using a service account key.
 
-  The given resource must implement the `List.Chars` protocol.
+  The given resource may be a binary value or any data structure that
+  implements the `List.Chars` protocol.
   """
   @spec generate(any(), binary()) :: {:error, {:signature, any()}} | {:ok, binary()}
   def generate(resource, private_key) when is_binary(private_key) do
@@ -30,18 +31,20 @@ defmodule Guss.Signature do
 
   Same as `generate/2`, but raises on error.
   """
-  @spec generate!(any(), binary()) :: binary()
-  def generate!(resource, private_key) when is_binary(private_key) do
+  @spec generate!(resource :: any(), private_key :: binary()) :: binary()
+  def generate!(resource, private_key) when not is_binary(resource) do
+    resource |> to_charlist() |> to_string() |> generate!(private_key)
+  end
+
+  def generate!(resource, private_key) when is_binary(resource) and is_binary(private_key) do
     decoded_key = decode_key!(private_key)
 
     resource
-    |> to_charlist()
-    |> to_string()
     |> :public_key.sign(:sha256, decoded_key)
     |> Base.encode64()
   end
 
-  # Decodes a GCS Serive Account private key for URL signing.
+  # Decodes a GCS Service Account private key for URL signing.
   #
   # For more information, see this comment on `erlang-jose`:
   # https://github.com/potatosalad/erlang-jose/issues/13#issuecomment-160718744

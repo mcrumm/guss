@@ -126,7 +126,9 @@ defmodule GussTest do
       |> String.to_integer()
       |> assert_valid_expires(3600 * 2)
 
-      {:ok, expected_signature} = Guss.Signature.generate(url, private_key)
+      s2s = Guss.StorageV2Signer.string_to_sign(url)
+
+      {:ok, expected_signature} = Guss.Signature.generate(s2s, private_key)
 
       assert Map.get(query, "Signature", false)
       assert Map.get(query, "Signature", false) == expected_signature
