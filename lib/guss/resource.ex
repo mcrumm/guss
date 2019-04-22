@@ -74,6 +74,33 @@ defmodule Guss.Resource do
             http_verb: :get,
             objectname: nil
 
+  @doc """
+  Get a list of canonical headers for the given resource.
+
+  This function returns a list of tuples for all headers defined
+  on a `Guss.Resource`. The list maintains the ordering of custom
+  extensions. To ensure full compatibility, the request using the
+  Signed URL should apply the signed headers in the order returned.
+
+  For more information, see `Guss.CanonicalData`.
+
+  ## Examples
+
+      iex> Guss.put("b", "o.txt")
+      ...> |> Guss.Resource.signed_headers()
+      []
+
+      iex> Guss.Resource.signed_headers(Guss.put("b", "o.txt", content_type: "text/plain"))
+      [{"content-type", "text/plain"}]
+  """
+  def signed_headers(%__MODULE__{} = resource) do
+    Guss.RequestHeaders.dasherize(
+      content_md5: resource.content_md5,
+      content_type: resource.content_type,
+      x_goog: resource.extensions
+    )
+  end
+
   defimpl List.Chars do
     import Guss.Canonical
 
