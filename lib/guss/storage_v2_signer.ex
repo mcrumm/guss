@@ -79,8 +79,7 @@ defmodule Guss.StorageV2Signer do
   defp filter_extension({"x-goog-" <> _rest, _}), do: true
   defp filter_extension(_kv), do: false
 
-  @spec build_url(Guss.Resource.t(), binary()) :: String.t()
-  def build_url(%Guss.Resource{} = resource, signature) when is_binary(signature) do
+  defp build_url(%Guss.Resource{} = resource, signature) when is_binary(signature) do
     query = resource |> build_signed_query(signature) |> URI.encode_query()
 
     Enum.join([to_string(resource), "?", query])

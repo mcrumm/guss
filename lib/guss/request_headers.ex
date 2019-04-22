@@ -1,6 +1,12 @@
 defmodule Guss.RequestHeaders do
   @moduledoc """
   Conveniences for working with canonical request headers.
+
+  Normally you do not need to access this module directly. It is
+  meant to be used by the signing processes.
+
+  If you want to get a list of signed headers for your request,
+  see `Guss.Resource.signed_headers/1`.
   """
 
   @doc """
