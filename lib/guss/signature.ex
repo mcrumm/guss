@@ -48,7 +48,7 @@ defmodule Guss.Signature do
   defp decode_key!(private_key) do
     private_key
     |> :public_key.pem_decode()
-    |> (fn [x] -> x end).()
+    |> hd()
     |> :public_key.pem_entry_decode()
     |> normalize_key!()
   end

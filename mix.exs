@@ -59,7 +59,7 @@ defmodule Guss.MixProject do
 
   defp deps do
     [
-      {:goth, "~> 0.11.0", only: [:dev, :test]},
+      {:goth, "~> 1.1.0", only: [:dev, :test]},
       {:ex_doc, "~> 0.18", only: :dev, runtime: false},
       {:junit_formatter, "~> 2.1", only: :test}
     ]
