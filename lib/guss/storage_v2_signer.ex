@@ -60,10 +60,9 @@ defmodule Guss.StorageV2Signer do
     |> Resource.signed_headers()
     |> headers_to_sign()
     |> case do
-      [] -> [resource_name(resource)]
-      headers_to_sign -> [headers_to_sign, resource_name(resource)]
+      [] -> resource_name(resource)
+      headers_to_sign -> [headers_to_sign, ?\n, resource_name(resource)]
     end
-    |> Enum.intersperse(?\n)
   end
 
   defp headers_to_sign([]), do: []
